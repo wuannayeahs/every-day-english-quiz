@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Speaking Expressions Quiz</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#fdf8f1;--card:#fff;--text:#2b2433;--muted:#7a7085;--line:#e8dfd3;--accent:#ff7a59;--good:#2fa86b;--goodbg:#e3f6ec;--bad:#d9453b;--badbg:#fde8e6;--ill1:#ffe7c2;--ill2:#ffc9d6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#1d1a22;--card:#2a2630;--text:#f3eef7;--muted:#a69db1;--line:#403a48;--accent:#ff8d6e;--good:#5ad39a;--goodbg:#1f3a2e;--bad:#ff7d73;--badbg:#412426;--ill1:#4a3a2c;--ill2:#4a2e3a}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#1d1a22;--card:#2a2630;--text:#f3eef7;--muted:#a69db1;--line:#403a48;--accent:#ff8d6e;--good:#5ad39a;--goodbg:#1f3a2e;--bad:#ff7d73;--badbg:#412426;--ill1:#4a3a2c;--ill2:#4a2e3a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Nunito","Segoe UI",system-ui,-apple-system,sans-serif;min-height:100vh}
+.app{max-width:520px;margin:0 auto;padding:18px 16px 32px}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.bar{flex:1;height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .4s}
+.count{font-size:14px;font-weight:700;color:var(--muted);min-width:48px;text-align:right}
+.ill{border-radius:24px;overflow:hidden;box-shadow:0 6px 0 var(--line);user-select:none;line-height:0}.ill svg{width:100%;height:auto;display:block}
+.ill span{display:inline-block;animation:bob 2.4s ease-in-out infinite}
+.ill span:nth-child(2){animation-delay:.3s}.ill span:nth-child(3){animation-delay:.6s}
+@keyframes bob{50%{transform:translateY(-8px)}}
+@media (prefers-reduced-motion:reduce){.ill span{animation:none}}
+.q{font-size:22px;line-height:1.45;font-weight:800;margin:22px 4px 18px;text-align:center}
+.blank{display:inline-block;min-width:90px;border-bottom:3px solid var(--accent);color:var(--accent);padding:0 6px;transition:all .2s}
+.blank.done{color:var(--good);border-color:var(--good)}
+.opts{display:grid;gap:10px}
+.opt{font:inherit;font-size:18px;font-weight:700;text-align:left;padding:14px 16px;border-radius:16px;border:2px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;transition:transform .1s,border-color .15s}
+.opt:active{transform:scale(.98)}
+.opt:hover{border-color:var(--accent)}
+.opt.good{background:var(--goodbg);border-color:var(--good);color:var(--good)}
+.opt.bad{background:var(--badbg);border-color:var(--bad);color:var(--bad)}
+.opts.lock .opt{pointer-events:none}
+.next{margin-top:18px;width:100%;font:inherit;font-size:18px;font-weight:800;padding:15px;border:0;border-radius:16px;background:var(--accent);color:#fff;cursor:pointer;visibility:hidden}
+.next.show{visibility:visible}
+.lbl{font-weight:800;color:var(--muted);margin:18px 4px 8px;font-size:14px}.seg{display:flex;gap:8px}.seg button{flex:1;font:inherit;font-weight:800;font-size:16px;padding:12px 6px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--text);cursor:pointer}.seg button.on{border-color:var(--accent);background:var(--accent);color:#fff}.chip{font-size:14px;font-weight:800;color:var(--good);background:var(--goodbg);padding:4px 10px;border-radius:99px;white-space:nowrap}.nav{display:flex;gap:10px;margin-top:18px}.nav .next{margin-top:0;flex:1;width:auto}.prev{font:inherit;font-size:18px;font-weight:800;padding:15px 18px;border-radius:16px;border:2px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;visibility:hidden}.dots{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:14px 0 18px}.dots b{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff}.dots .g{background:var(--good)}.dots .r{background:var(--bad)}.end{text-align:center;padding-top:40px}
+.end .big{font-size:90px}
+.end h1{font-size:30px;margin:10px 0 4px}
+.end p{color:var(--muted);font-size:18px;margin:0 0 24px}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script>
+var D=[
+["⏰😴","Every morning I ___ at least three times before I finally get up.","Hit the snooze button","Hit the jackpot","Hit the books","Hit the road"],
+["🚆🏢","My ___ to work takes about forty minutes by train.","Commute","Holiday","Reunion","Rehearsal"],
+["🪒🧔","He needed to ___ before his job interview.","Have a shave","Have a clue","Have a laugh","Have a go"],
+["🛒🏦📮","On Saturdays I usually ___ : the bank, the post office and the supermarket.","Run errands","Run out of time","Run a marathon","Run for office"],
+["🤝🙂","I’d love to ___ my new neighbours better.","Get to know","Get rid of","Get away with","Get over"],
+["👫🍕","Do you want to ___ my friends this weekend?","Hang out with","Hang up on","Look down on","Give up on"],
+["📱💌","We live in different countries, but we always ___ by video call.","Keep in touch","Keep an eye","Keep it down","Keep out"],
+["💔😢","They decided to ___ after five years together.","Break up","Break in","Break down","Break even"],
+["😱🕷️","I ___ when I saw a huge spider on my pillow.","Freaked out","Cheered up","Showed off","Cooled down"],
+["🤣🎤","The joke was so silly that everyone ___.","Burst out laughing","Held their tongue","Kept their cool","Lost their way"],
+["⚽😭","I always ___ when my team loses in the last minute.","Get gutted","Get promoted","Get lost","Get the hang of it"],
+["😳🎭","She felt ___ when she forgot her lines on stage.","Flustered","Relaxed","Thrilled","Amused"],
+["😬🎶","I ___ when I heard him sing so badly.","Cringed","Applauded","Bowed","Beamed"],
+["🎤😆","The comedian was so funny that the whole room ___.","Cracked up","Cracked down","Calmed down","Cleared up"],
+["😰📝","I ___ all day waiting for my exam results.","Was on edge","Was on the ball","Was on fire","Was on the house"],
+["🤐👩‍🏫","When the teacher asked who broke the window, he ___.","Clammed up","Opened up","Cheered up","Piled up"],
+["😡💻","I ___ when my brother broke my laptop.","Lost my temper","Kept my promise","Changed my mind","Made my bed"],
+["🎂🎈","She ___ when everyone started singing happy birthday to her.","Went red","Went missing","Went viral","Went dark"],
+["🌙🎉","She was ___ when she found out she’d got the job.","Over the moon","Under the weather","Out of the blue","Off the hook"]
+];
+function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+var I='#2b2433',SK=['#f6c9a0','#e0a878','#a8734d'];
+function st(d,w){return '<path d="'+d+'" fill="none" stroke="'+I+'" stroke-width="'+(w||3)+'" stroke-linecap="round" stroke-linejoin="round"/>'}
+var dot='<circle cx="-9" cy="-2" r="3.4" fill="'+I+'"/><circle cx="9" cy="-2" r="3.4" fill="'+I+'"/>',MO='#8a2f45';
+var F={
+smile:dot+st('M-9 11Q0 20 9 11'),
+laugh:st('M-14 -2Q-9 -9 -4 -2M4 -2Q9 -9 14 -2')+'<path d="M-11 8Q0 32 11 8Z" fill="'+MO+'"/>',
+shock:'<circle cx="-9" cy="-2" r="6.5" fill="#fff"/><circle cx="9" cy="-2" r="6.5" fill="#fff"/><circle cx="-9" cy="-2" r="2.4" fill="'+I+'"/><circle cx="9" cy="-2" r="2.4" fill="'+I+'"/>'+st('M-15 -14Q-9 -18 -4 -13M15 -14Q9 -18 4 -13',2.5)+'<ellipse cx="0" cy="17" rx="6" ry="8" fill="'+MO+'"/>',
+angry:dot+st('M-16 -12L-4 -7M16 -12L4 -7')+st('M-9 18Q0 10 9 18'),
+sad:dot+st('M-16 -7L-4 -12M16 -7L4 -12',2.5)+st('M-9 18Q0 10 9 18')+'<path d="M-12 4Q-15 10 -12 12Q-9 10 -12 4Z" fill="#6ec3ff"/>',
+zip:dot+st('M-11 14H11')+st('M-8 11V17M-3 11V17M2 11V17M7 11V17',2),
+cringe:st('M-15 -7L-5 -2L-15 3M15 -7L5 -2L15 3')+'<rect x="-11" y="9" width="22" height="9" rx="3" fill="#fff" stroke="'+I+'" stroke-width="2.5"/>'+st('M-4 9V18M4 9V18',2),
+sleepy:st('M-14 -2H-5M5 -2H14')+'<ellipse cx="0" cy="15" rx="4" ry="3" fill="'+MO+'"/>',
+sweat:dot+st('M-16 -7L-4 -12M16 -7L4 -12',2.5)+st('M-9 16Q-4 11 0 16T9 16')+'<path d="M28 -14Q23 -6 28 -3Q33 -6 28 -14Z" fill="#6ec3ff"/>',
+blush:st('M-14 0Q-9 -7 -4 0M4 0Q9 -7 14 0')+st('M-7 12Q0 18 7 12')+'<circle cx="-17" cy="9" r="7" fill="#ff7a8a" opacity=".6"/><circle cx="17" cy="9" r="7" fill="#ff7a8a" opacity=".6"/>'
+};
+function P(x,y,o){o=o||{};
+ var s=o.s||SK[0],h=o.h||'#3a2a22',c=o.c||'#4f8cff',k=o.k||1,hs=o.f||'short';
+ var L={down:[-30,72,30,72],up:[-38,0,38,0],face:[-14,14,14,14],right:[-30,72,56,40],left:[-56,40,30,72],hold:[-26,62,26,62]}[o.a||'down'];
+ var g='<g transform="translate('+x+','+y+') scale('+k+')">';
+ g+='<rect x="-15" y="76" width="12" height="32" rx="4" fill="#38405a"/><rect x="3" y="76" width="12" height="32" rx="4" fill="#38405a"/>';
+ g+='<path d="M-22 36L'+L[0]+' '+L[1]+'M22 36L'+L[2]+' '+L[3]+'" stroke="'+c+'" stroke-width="11" stroke-linecap="round"/>';
+ g+='<rect x="-22" y="26" width="44" height="56" rx="16" fill="'+c+'"/>';
+ if(hs=='long')g+='<rect x="-32" y="-12" width="12" height="46" rx="6" fill="'+h+'"/><rect x="20" y="-12" width="12" height="46" rx="6" fill="'+h+'"/>';
+ if(hs=='bun')g+='<circle cx="0" cy="-34" r="11" fill="'+h+'"/>';
+ g+='<circle r="28" fill="'+s+'"/>';
+ if(o.r)g+='<circle r="28" fill="#ff4d4d" opacity=".5"/>';
+ g+='<path d="M-29 0C-31-38 31-38 29 0C20-17-20-17-29 0Z" fill="'+h+'"/>'+F[o.e||'smile'];
+ g+='<circle cx="'+L[0]+'" cy="'+L[1]+'" r="7" fill="'+s+'"/><circle cx="'+L[2]+'" cy="'+L[3]+'" r="7" fill="'+s+'"/>';
+ return g+(o.x||'')+'</g>'}
+function R(x,y,w,h,f,r){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(r||0)+'" fill="'+f+'"/>'}
+function C(x,y,r,f){return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+f+'"/>'}
+function T(x,y,t,sz,f){return '<text x="'+x+'" y="'+y+'" text-anchor="middle" font-size="'+sz+'" font-weight="800" font-family="Nunito,Arial,sans-serif" fill="'+f+'">'+t+'</text>'}
+var HT='M0 8C-14-4-8-16 0-8C8-16 14-4 0 8Z',BR='#8b5a3c';
+var SC={
+'Hit the snooze button':['#cfd8ff','#8e8bb5',R(190,136,84,32,BR,4)+'<g transform="translate(232,100)">'+C(-18,-34,9,'#e8505b')+C(18,-34,9,'#e8505b')+C(0,0,36,'#e8505b')+C(0,0,29,'#fff')+'<path d="M0 0V-18M0 0L12 6" stroke="'+I+'" stroke-width="4" stroke-linecap="round"/></g>'+P(90,62,{e:'sleepy',a:'right',c:'#8fb3ff',h:'#6b4226'})],
+'Commute':['#bfe3ff','#7f8ea3',R(10,20,280,148,'#eef2f8',14)+R(24,36,76,56,'#8fd0ff',8)+R(112,36,76,56,'#8fd0ff',8)+R(200,36,76,56,'#8fd0ff',8)+P(150,62,{e:'smile',a:'hold',c:'#ff9f43',x:R(-20,56,40,28,BR,5)+R(-6,50,12,6,'#5a3a22',3)})],
+'Have a shave':['#d9f1ee','#9bc9c3',R(222,128,16,40,'#8aa')+C(230,86,42,'#8aa')+C(230,86,34,'#e8f8ff')+'<path d="M212 74L226 64" stroke="#fff" stroke-width="5" stroke-linecap="round"/>'+P(100,62,{e:'smile',a:'right',c:'#f2f2f2',h:'#2b2433',x:'<path d="M-20 8Q-22 28 0 30Q22 28 20 8Q0 18-20 8Z" fill="#fff"/>'+R(52,22,6,22,'#2b6cb0',3)+R(48,16,16,8,'#ccd',2)})],
+'Run errands':['#fff1c9','#cdb98a',R(14,70,70,98,'#7fb7e6')+R(118,82,70,86,'#ef8f8f')+R(216,76,70,92,'#8fd1a0')+P(150,62,{e:'smile',c:'#ff6b6b',f:'bun',h:'#5a3a2a',x:R(-44,64,26,30,'#ffb347',4)+R(18,64,26,30,'#6bcf8f',4)})],
+'Get to know':['#ffe3d3','#a8d5a2',R(20,86,70,82,'#f7c59f')+'<path d="M12 88L55 52L98 88Z" fill="#c8553d"/>'+R(210,86,70,82,'#cfe3f7')+'<path d="M202 88L245 52L288 88Z" fill="#5b7fa8"/>'+P(105,70,{k:.85,a:'right'})+P(195,70,{k:.85,a:'left',c:'#ff9f43',f:'long',h:'#7a3b1e',s:SK[1]})],
+'Hang out with':['#ffe9a8','#c9a86a',P(60,72,{k:.85,e:'laugh',c:'#4f8cff'})+P(150,72,{k:.85,a:'up',c:'#ff6b9d',f:'long',h:'#7a3b1e',s:SK[2]})+P(240,72,{k:.85,e:'laugh',c:'#6bcf8f',h:'#c97a2b'})+R(60,124,180,12,BR,6)+R(146,136,8,32,BR)+'<ellipse cx="150" cy="121" rx="28" ry="7" fill="#f2b84b"/>'+C(140,120,3,'#d9534f')+C(152,122,3,'#d9534f')+C(162,119,3,'#d9534f')],
+'Keep in touch':['#ffe9a8','#8a8fb8',R(150,0,150,168,'#2f3a6b')+C(30,30,14,'#ffb347')+C(270,30,12,'#ffe9a8')+C(200,24,2,'#fff')+C(240,60,2,'#fff')+'<path d="M116 80Q150 20 184 80" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round"/><path transform="translate(150,52) scale(2.2)" d="'+HT+'" fill="#e8505b"/>'+P(65,62,{a:'right',x:R(50,16,14,26,'#222',3)+R(53,20,8,16,'#6ec3ff',2)})+P(235,62,{a:'left',c:'#ff6b9d',f:'long',h:'#7a3b1e',s:SK[1],x:R(-64,16,14,26,'#222',3)+R(-61,20,8,16,'#6ec3ff',2)})],
+'Break up':['#e3d8f0','#a99bc2','<path transform="translate(150,66) scale(3)" d="'+HT+'" fill="#e8505b"/><path d="M150 44L145 58L155 66L148 80" stroke="#e3d8f0" stroke-width="3" fill="none"/>'+P(72,62,{e:'sad'})+P(228,62,{e:'sad',c:'#ff6b9d',f:'long',h:'#7a3b1e',s:SK[1]})],
+'Freaked out':['#ffd6d6','#cc9999','<path d="M205 0V62" stroke="#444" stroke-width="2"/>'+C(205,72,12,'#333')+C(200,69,3,'#fff')+C(210,69,3,'#fff')+'<path d="M193 72L180 60M193 76L178 78M193 80L182 92M217 72L230 60M217 76L232 78M217 80L228 92" stroke="#333" stroke-width="3" stroke-linecap="round"/>'+P(105,62,{e:'shock',a:'up',c:'#8f6bff'})],
+'Burst out laughing':['#d9f0ff','#99cccc',P(80,66,{e:'laugh',a:'hold',c:'#ff9f43'})+P(220,66,{e:'laugh',a:'up',c:'#6bcf8f',f:'long',h:'#7a3b1e',s:SK[1]})],
+'Get gutted':['#cfe8c8','#6fae66',R(190,34,96,66,I,8)+R(198,42,80,50,'#3fa65b',4)+R(196,110,84,58,BR,4)+C(150,158,9,'#fff')+P(90,62,{e:'sad',a:'face',c:'#e8505b',x:R(-20,26,40,9,'#fff',4)})],
+'Flustered':['#3a2b57','#8b5a3c','<path d="M150 0L100 168H200Z" fill="#fff" opacity=".12"/><path d="M0 0H70Q40 80 60 168H0Z" fill="#c43b52"/><path d="M300 0H230Q260 80 240 168H300Z" fill="#c43b52"/>'+P(150,62,{e:'sweat',r:1,a:'hold',c:'#4fc3a1',f:'long',h:'#7a3b1e',x:R(-14,52,28,22,'#fff',2)})],
+'Cringed':['#fde4ff','#c9a0cf',P(80,62,{e:'cringe',c:'#4f8cff'})+P(220,62,{e:'laugh',a:'left',c:'#ff6b9d',f:'long',h:'#7a3b1e',s:SK[1],x:R(-62,26,8,22,'#555',4)+C(-58,22,8,'#999')})],
+'Cracked up':['#2f2a4a','#7a5a3a','<path d="M80 0L30 168H130Z" fill="#fff" opacity=".15"/>'+P(80,62,{c:'#ffd34d',a:'right',x:R(50,24,8,20,'#ccc',4)})+P(195,86,{k:.75,e:'laugh',a:'up',c:'#6bcf8f',f:'long',h:'#7a3b1e'})+P(255,86,{k:.75,e:'laugh',a:'up',c:'#ff6b9d',s:SK[2]})],
+'Was on edge':['#e6e6f2','#aaaabb',C(232,60,30,'#fff')+'<path d="M232 60V42M232 60L246 66" stroke="#667" stroke-width="4" stroke-linecap="round"/>'+R(196,156,84,12,BR)+R(210,118,56,38,'#fff',4)+'<path d="M210 118L238 140L266 118" fill="none" stroke="#99a" stroke-width="3"/><path d="M50 60Q44 70 50 80M42 56Q34 70 42 84" stroke="#889" fill="none" stroke-width="3" stroke-linecap="round"/>'+P(110,62,{e:'sweat',a:'face',c:'#6bcf8f'})],
+'Clammed up':['#f4e7d3','#b79a6e',R(196,22,86,90,'#bfe9ff')+'<path d="M239 22L226 66L250 74L232 112M226 66L202 60M250 74L276 82" stroke="#fff" stroke-width="3" fill="none"/>'+P(60,62,{e:'angry',a:'right',c:'#8e5bd0',f:'bun',h:'#5a3a2a'})+P(150,70,{k:.85,e:'zip',c:'#ff9f43',h:'#c97a2b'})],
+'Lost my temper':['#ffd0c2','#d49a8a',R(190,146,80,12,'#667',4)+'<path d="M200 146L206 96H256L262 146Z" fill="'+I+'"/>'+R(209,102,44,38,'#6ec3ff')+'<path d="M231 102L222 120L240 124L226 140" stroke="#fff" stroke-width="3" fill="none"/><path d="M70 28Q62 18 70 10M130 28Q138 18 130 10" stroke="#e8505b" stroke-width="4" fill="none" stroke-linecap="round"/>'+P(100,62,{e:'angry',r:1,a:'up'})],
+'Went red':['#ffe0ef','#d9a0bd','<ellipse cx="22" cy="46" rx="14" ry="18" fill="#ff6b9d"/><ellipse cx="278" cy="50" rx="14" ry="18" fill="#6ec3ff"/><path d="M22 64Q16 100 24 130M278 68Q284 100 276 130" stroke="#999" fill="none"/>'+P(62,86,{k:.7,e:'laugh',c:'#4f8cff'})+P(238,86,{k:.7,e:'laugh',c:'#6bcf8f',h:'#c97a2b'})+P(150,64,{e:'blush',r:1,f:'long',h:'#7a3b1e',c:'#ffb347'})+R(112,138,76,8,BR,4)+R(126,112,48,26,'#fff',5)+R(126,112,48,9,'#ff8fb1',4)+R(146,98,5,14,'#4f8cff')+'<path d="M148.5 90Q144 96 148.5 98Q153 96 148.5 90Z" fill="#ffb347"/>'],
+'Over the moon':['#1f2a5e','#3a4a8c',C(215,74,46,'#ffe9a8')+C(200,60,8,'#f0d68a')+C(228,88,11,'#f0d68a')+C(30,30,2.5,'#fff')+C(80,16,2,'#fff')+C(120,40,2.5,'#fff')+C(270,20,2,'#fff')+R(40,60,8,4,'#ff6b9d')+R(170,20,8,4,'#6bcf8f')+R(70,110,8,4,'#ffd34d')+R(260,120,8,4,'#6ec3ff')+'<ellipse cx="120" cy="172" rx="30" ry="6" fill="#000" opacity=".2"/>'+P(120,46,{e:'laugh',a:'up',c:'#ff9f43'})]
+};
+var N=19,HINT=true;
+function BB(x,y){return R(x,y,64,26,'#fff',13)+C(x+20,y+13,4,'#bbb')+C(x+32,y+13,4,'#bbb')+C(x+44,y+13,4,'#bbb')}
+var NS=[
+['#fff1c9','#cdb98a',BB(118,6)+P(95,66,{a:'right'})+P(205,66,{a:'left',c:'#ff6b9d',f:'long',h:'#7a3b1e',s:SK[1]})],
+['#d9f0ff','#99cccc',P(70,72,{k:.85,c:'#ff9f43'})+P(150,72,{k:.85,a:'up',c:'#6bcf8f',f:'long',h:'#7a3b1e',s:SK[2]})+P(230,72,{k:.85,c:'#8f6bff',h:'#c97a2b'})],
+['#e3d8f0','#a99bc2',BB(190,24)+P(120,62,{a:'up',c:'#ff6b9d',f:'bun',h:'#5a3a2a'})],
+['#d9f1ee','#9bc9c3',BB(30,8)+BB(206,8)+P(80,70,{k:.9,c:'#4f8cff'})+P(220,70,{k:.9,c:'#ffb347',f:'long',h:'#2b2433',s:SK[1]})],
+['#ffe3d3','#a8d5a2',R(135,70,16,98,BR)+C(143,60,44,'#5fb36b')+P(60,70,{k:.85,a:'right'})+P(240,70,{k:.85,a:'left',c:'#ff9f43',f:'long',h:'#7a3b1e'})],
+['#cfe8c8','#6fae66',R(50,14,200,86,'#2f6b4f',6)+R(46,100,208,6,BR)+P(100,70,{k:.9,c:'#e8505b',a:'right'})+P(200,70,{k:.9,c:'#4f8cff',f:'bun',h:'#5a3a2a',s:SK[2]})]
+];
+function scene(k,n){var S=HINT?SC[k]:NS[n%NS.length];return '<svg viewBox="0 0 300 190" xmlns="http://www.w3.org/2000/svg">'+R(0,0,300,190,S[0])+R(0,168,300,22,S[1])+S[2]+'</svg>'}
+var app=document.getElementById('app'),Q,i,score,A,OR;
+function menu(){
+ var cnt=[5,10,15,D.length];
+ app.innerHTML='<div class="ill">'+scene('',0)+'</div><div class="q">Speaking Expressions Quiz</div>'
+ +'<div class="lbl">Random questions</div><div class="seg" id="sg1">'+cnt.map(function(c){return '<button data-v="'+c+'" class="'+(c==N?'on':'')+'">'+(c==D.length?'All '+c:c)+'</button>'}).join('')+'</div>'
+ +'<div class="lbl">Illustration</div><div class="seg" id="sg2"><button data-v="0" class="'+(HINT?'':'on')+'">Neutral</button><button data-v="1" class="'+(HINT?'on':'')+'">Matches the answer</button></div>'
+ +'<button class="next show" id="go" style="margin-top:22px">Start</button>';
+ seg('sg1',function(v){N=+v});seg('sg2',function(v){HINT=v=='1'});
+ document.getElementById('go').onclick=start;
+}
+function seg(id,f){var b=document.getElementById(id);b.onclick=function(e){var t=e.target;if(t.tagName!='BUTTON')return;[].forEach.call(b.children,function(x){x.classList.remove('on')});t.classList.add('on');f(t.dataset.v)}}
+function start(){Q=shuf(D).slice(0,N);i=0;score=0;A=[];OR=[];show()}
+function show(){
+ var d=Q[i],parts=d[1].split('___');
+ app.innerHTML='<div class="top"><div class="bar"><i style="width:'+(i/Q.length*100)+'%"></i></div><div class="count">'+(i+1)+' / '+Q.length+'</div><div class="chip" id="chip">✓ '+score+'</div></div>'
+ +'<div class="ill">'+scene(d[2],i)+'</div>'
+ +'<div class="q">'+parts[0]+'<span class="blank" id="bl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'+parts[1]+'</div>'
+ +'<div class="opts" id="opts"></div><div class="nav"><button class="prev" id="pv">Back</button><button class="next" id="nx"></button></div>';
+ var box=document.getElementById('opts');
+ OR[i]=OR[i]||shuf(d.slice(2));OR[i].forEach(function(o){
+  var b=document.createElement('button');b.className='opt';b.textContent=o;
+  b.onclick=function(){pick(b,o)};box.appendChild(b)});var pv=document.getElementById('pv');pv.style.visibility=i?'visible':'hidden';pv.onclick=function(){i--;show()};if(A[i]!==undefined)pick(null,A[i],1);
+}
+function pick(b,o,re){var ok=o===Q[i][2];
+ var d=Q[i],box=document.getElementById('opts');box.classList.add('lock');
+ [].forEach.call(box.children,function(x){if(x.textContent===d[2])x.classList.add('good')});
+ if(!re){A[i]=o;if(ok)score++}if(!ok)[].forEach.call(box.children,function(x){if(x.textContent===o)x.classList.add('bad')});var ch=document.getElementById('chip');if(ch)ch.textContent='✓ '+score;
+ var bl=document.getElementById('bl');bl.textContent=d[2].toLowerCase()===d[2]?d[2]:d[2].charAt(0).toLowerCase()+d[2].slice(1);
+ if(/^(Commute|Flustered)$/.test(d[2]))bl.textContent=d[2].toLowerCase();
+ bl.classList.add('done');
+ var n=document.getElementById('nx');n.textContent=i<Q.length-1?'Next':'See result';n.classList.add('show');
+ n.onclick=function(){i++;i<Q.length?show():end()};
+}
+function end(){
+ var p=score/Q.length,e=p>.8?'🏆':p>.5?'🎉':'💪';
+ app.innerHTML='<div class="end"><div class="big">'+e+'</div><h1>'+score+' / '+Q.length+'</h1><div class="dots">'+Q.map(function(q,k){return '<b class="'+(A[k]===q[2]?'g':'r')+'">'+(k+1)+'</b>'}).join('')+'</div><p>'+(p>.8?'Excellent speaking skills!':p>.5?'Nice work, keep practising!':'Good start, try again!')+'</p><button class="next show" id="re">Play again</button></div>';
+ document.getElementById('re').onclick=start;
+}
+start();
+</script>
+</body>
+</html>
